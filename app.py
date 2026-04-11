@@ -88,19 +88,20 @@ y_train, y_test = y[:train_size], y[train_size:]
 # 6. Build Model (Cached)
 # -------------------------
 @st.cache_resource
-def build_and_train_model(X_train, y_train):
+def build_model(input_shape):
     model = Sequential()
-    model.add(LSTM(50, return_sequences=True, input_shape=(X_train.shape[1], 1)))
+    model.add(LSTM(50, return_sequences=True, input_shape=input_shape))
     model.add(LSTM(50))
     model.add(Dense(1))
-
     model.compile(optimizer='adam', loss='mean_squared_error')
-
-    model.fit(X_train, y_train, epochs=5, batch_size=32, verbose=0)
-
     return model
 
-model = build_and_train_model(X_train, y_train)
+model = build_model((X.shape[1], 1))
+
+# Train only once
+if "trained" not in st.session_state:
+    model.fit(X_train, y_train, epochs=5, batch_size=32, verbose=0)
+    st.session_state.trained = True
 
 # -------------------------
 # 7. Predict Next Day
