@@ -1,7 +1,0 @@
-streamlit
-yfinance
-numpy==1.24.3
-pandas
-scikit-learn
-tensorflow==2.15.0
-setuptools
